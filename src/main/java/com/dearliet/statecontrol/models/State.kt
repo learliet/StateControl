@@ -1,29 +1,20 @@
 package com.dearliet.statecontrol.models
 
-import org.bukkit.Bukkit
 import org.bukkit.event.Listener
 
 /**
- * Abstract class representing a state in a state machine.
+ * An abstract class representing a state in a [StateMachine].
  *
- * @param holder The object that owns this state.
- * @param parentStateMachine The state machine to associate this state with.
+ * @param holder The unique object that owns the state machine structure.
+ * @param parentStateMachine The parent [StateMachine] of this instance.
  */
-abstract class State<T: Any>(val holder: T, val parentStateMachine: StateMachine<T>?): Listener {
+abstract class State<T: Any>(val holder: T, open val parentStateMachine: StateMachine<T, *>?): Listener {
     /**
-     * The name of this state. The default implementation returns the simple name of the class.
+     * Called when this [State] is enabled.
      */
-    open val name: String get() = javaClass.simpleName
+    open fun onEnable(){}
     /**
-     * Called when this state is enabled.
+     * Called when this [State] is disabled.
      */
-    open fun onEnable(){
-        Bukkit.getLogger().info("$name enabled")
-    }
-    /**
-     * Called when this state is disabled.
-     */
-    open fun onDisable(){
-        Bukkit.getLogger().info("$name disabled")
-    }
+    open fun onDisable(){}
 }
