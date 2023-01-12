@@ -1,4 +1,4 @@
-name: Statecontrol
+name: StateControl
 version: '${project.version}'
-main: com.dearliet.statecontrol.Statecontrol
+main: com.dearliet.statecontrol.StateControl
 api-version: 1.19
