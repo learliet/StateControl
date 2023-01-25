@@ -1,43 +1,54 @@
 package com.dearliet.statecontrol.models
 
 import com.dearliet.statecontrol.StateControl
+import com.dearliet.statecontrol.models.BaseState.StateMachine
 import org.bukkit.Bukkit
 import org.bukkit.scheduler.BukkitRunnable
 import org.bukkit.scheduler.BukkitTask
 
+// maybe also add delay
 /**
- * An abstract [State] class that counts down from a specified number of [ticks] and transitions automatically to the next [State] once the timer has run out.
+ * The [TimerState] class counts down from a specified number of [units] and allows an action to be specified once the timer has run out.
  *
  * @param holder The unique object that owns the state machine structure.
  * @param parentStateMachine The parent [StateMachine] of this instance.
- * @param ticks The total number of ticks for the timer.
  */
-abstract class TimerState<T: Any>(holder: T, parentStateMachine: StateMachine<T, *>?, open val ticks: Int = 20): State<T>(holder, parentStateMachine) {
+abstract class TimerState<T : Any>(holder: T, parentStateMachine: StateMachine<T, *>)
+    : State<T>(holder, parentStateMachine) {
+
     private lateinit var task: BukkitTask
+    /**
+     * The number of units in the timer.
+     */
+    abstract val units: Long
+    /**
+     * The number of ticks per unit.
+     */
+    open val ticksPerUnit: Long = 1
 
     /**
-     * This function is called for each tick.
-     * @param tick The number of ticks left before the timer completes.
+     * This function is called for each unit.
+     * @param unitsLeft The number of units left before the timer completes.
      */
-    open fun onTick(tick: Int){}
+    open fun onUnit(unitsLeft: Long){}
+
+    /**
+     * This function is called when the timer completes.
+     */
+    open fun onComplete(){}
 
     override fun onEnable() {
         super.onEnable()
-        var ticksLeft = ticks
-
+        var unitsLeft = units
         task = object : BukkitRunnable(){
 
             override fun run() {
-                onTick(ticksLeft)
-
-                if(ticksLeft == 0){
-                    parentStateMachine?.next()
-                }
-
-                ticksLeft--
+                onUnit(unitsLeft)
+                Bukkit.getLogger().info(unitsLeft.toString())
+                if(unitsLeft-- <= 0) onComplete()
             }
 
-        }.runTaskTimer(StateControl.instance, 0, 1)
+        }.runTaskTimer(StateControl.instance, 0, ticksPerUnit)
     }
 
     override fun onDisable() {
