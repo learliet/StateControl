@@ -42,6 +42,7 @@
                                         <exclude>META-INF/*.DSA</exclude>
                                         <exclude>META-INF/*.RSA</exclude>
                                         <exclude>plugin.yml</exclude>
+                                        <exclude>LICENSE</exclude>
                                     </excludes>
                                 </filter>
                             </filters>
