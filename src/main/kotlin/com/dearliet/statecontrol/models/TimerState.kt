@@ -7,7 +7,6 @@ import org.bukkit.Bukkit
 import org.bukkit.scheduler.BukkitRunnable
 import org.bukkit.scheduler.BukkitTask
 
-// maybe also add delay
 /**
  * The [TimerState] class counts down from a specified number of [units] and allows an action to be specified once the timer has run out.
  *

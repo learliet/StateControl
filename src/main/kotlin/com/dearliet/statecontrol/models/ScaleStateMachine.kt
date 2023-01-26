@@ -5,7 +5,6 @@ import kotlin.properties.Delegates
 /**
  * The [ScaleStateMachine] simulates a scale, adjusting its [currentBalance] value when transitioning between states.
  * When transitioning past the upper bounds, [currentBalance] increases, and when transitioning past the lower bounds, it decreases.
- * The state machine will return to the starting state and continue to do so until [currentBalance] reaches the specified [targetBalance].
  */
 abstract class ScaleStateMachine<T : Any>(holder: T, parentStateMachine: StateMachine<T, *>? = null)
     : LinearStateMachine<T>(holder, parentStateMachine) {

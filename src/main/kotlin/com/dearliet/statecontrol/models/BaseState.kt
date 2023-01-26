@@ -92,6 +92,9 @@ sealed class BaseState<T: Any>(protected val holder: T, open val parentStateMach
             Bukkit.getPluginManager().registerEvents(state, StateControl.instance)
         }
 
+        /**
+         * Cancels the state machine.
+         */
         fun cancel(){
             val currentStateIndex = states.keys.indexOf(activeStateKey)
             val stateModel = states.values.elementAt(currentStateIndex)
