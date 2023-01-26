@@ -6,7 +6,7 @@
 
     <groupId>com.dearliet</groupId>
     <artifactId>statecontrol</artifactId>
-    <version>1.0.5-SNAPSHOT</version>
+    <version>1.0.6-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>StateControl</name>
@@ -41,6 +41,7 @@
                                         <exclude>META-INF/*.SF</exclude>
                                         <exclude>META-INF/*.DSA</exclude>
                                         <exclude>META-INF/*.RSA</exclude>
+                                        <exclude>plugin.yml</exclude>
                                     </excludes>
                                 </filter>
                             </filters>
