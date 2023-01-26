@@ -1,6 +1,7 @@
 package com.dearliet.statecontrol.models
 
 import com.dearliet.statecontrol.StateControl
+import com.dearliet.statecontrol.models.BaseState.State
 import com.dearliet.statecontrol.models.BaseState.StateMachine
 import org.bukkit.Bukkit
 import org.bukkit.scheduler.BukkitRunnable

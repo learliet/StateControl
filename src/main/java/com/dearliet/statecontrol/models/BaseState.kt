@@ -101,13 +101,13 @@ sealed class BaseState<T: Any>(protected val holder: T, open val parentStateMach
             HandlerList.unregisterAll(stateModel)
         }
     }
-}
 
-/**
- * An abstract class representing a state in a [StateMachine].
- *
- * @param holder The unique object that owns the state machine structure.
- * @param parentStateMachine The parent [StateMachine] of this instance.
- */
-abstract class State<T : Any>(holder: T, parentStateMachine: StateMachine<T, *>) : BaseState<T>(holder, parentStateMachine)
+    /**
+     * An abstract class representing a state in a [StateMachine].
+     *
+     * @param holder The unique object that owns the state machine structure.
+     * @param parentStateMachine The parent [StateMachine] of this instance.
+     */
+    abstract class State<T : Any>(holder: T, parentStateMachine: StateMachine<T, *>) : BaseState<T>(holder, parentStateMachine)
+}
 

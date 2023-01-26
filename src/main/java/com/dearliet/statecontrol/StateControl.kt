@@ -2,7 +2,7 @@ package com.dearliet.statecontrol
 
 import org.bukkit.plugin.java.JavaPlugin
 
-class StateControl : JavaPlugin() {
+internal class StateControl : JavaPlugin() {
 
     companion object {
         lateinit var instance: StateControl
