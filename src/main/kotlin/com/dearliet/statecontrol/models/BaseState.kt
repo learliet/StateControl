@@ -7,29 +7,29 @@ import org.bukkit.event.HandlerList
 import org.bukkit.event.Listener
 
 /**
- * Abstract class representing all states and state machines.
+ * A base class representing all states and state machines.
  *
- * @param holder The unique object that owns the state machine structure.
+ * @param owner The unique object that owns the state machine structure.
  * @param parentStateMachine The parent [StateMachine] of this instance.
  */
-sealed class BaseState<T: Any>(protected val holder: T, open val parentStateMachine: StateMachine<T, *>?) : Listener {
+sealed class BaseState<T: Any>(protected val owner: T, open val parentStateMachine: StateMachine<T, *>?) : Listener {
     /**
-     * Called when this [BaseState] is enabled.
+     * Called when base state is enabled.
      */
     protected open fun onEnable(){}
     /**
-     * Called when this [BaseState] is disabled.
+     * Called when base state is disabled.
      */
     protected open fun onDisable(){}
 
     /**
      * An abstract class representing a state machine.
      *
-     * @param holder The unique object that owns the state machine structure.
+     * @param owner The unique object that owns the state machine structure.
      * @param parentStateMachine The parent [StateMachine] of this instance.
      * */
-    sealed class StateMachine<T: Any, E: Any>(holder: T, parentStateMachine: StateMachine<T, *>?)
-        : BaseState<T>(holder, parentStateMachine) {
+    sealed class StateMachine<T: Any, E: Any>(owner: T, parentStateMachine: StateMachine<T, *>?)
+        : BaseState<T>(owner, parentStateMachine) {
 
         protected abstract val initStates: Any
         /**
@@ -52,39 +52,45 @@ sealed class BaseState<T: Any>(protected val holder: T, open val parentStateMach
         /**
          * Returns whether the [StateMachine] is active.
          * */
-        internal val isActive get() = this::activeStateKey.isInitialized
+        internal var isActive = false
 
         /**
          * Transitions to the [BaseState] represented by the [startingStateKey] in the [states] map.
+         *
+         * @throws NoSuchElementException if the [states] map is empty.
+         * @throws IllegalArgumentException if the [startingStateKey] is invalid.
          */
         fun start(){
             transitionTo(startingStateKey)
         }
 
         /**
-         * Called when the [StateMachine] changes state
+         * Called when the [StateMachine] transitions to another [BaseState].
          * @param previousStateKey The key of the [BaseState] that the [StateMachine] was in before transitioning to the current [BaseState].
          */
         protected open fun onChangeState(previousStateKey: E){}
 
         internal fun transitionTo(stateKey: E){
+            if(states.isEmpty()) throw NoSuchElementException("Unable to start the state machine because it does not contain any states.")
             require(states.containsKey(stateKey)) { "Invalid stateKey provided, expected one of ${states.keys} but got $stateKey." }
 
             if(isActive){
                 if(activeStateKey == stateKey) return
                 val previousStateKey = activeStateKey
-                cancel()
+                exitCurrentState()
                 activeStateKey = stateKey
                 onChangeState(previousStateKey)
             } else {
                 if(parentStateMachine == null) loadState(this)
                 activeStateKey = startingStateKey
+                isActive = true
             }
 
             states[activeStateKey]?.let {
                 (it as? StateMachine<T, *>)?.start()
                 loadState(it)
             }
+
         }
 
         private fun loadState(state: BaseState<T>){
@@ -92,25 +98,43 @@ sealed class BaseState<T: Any>(protected val holder: T, open val parentStateMach
             Bukkit.getPluginManager().registerEvents(state, StateControl.instance)
         }
 
+        private fun unloadState(state: BaseState<T>){
+            state.onDisable()
+            HandlerList.unregisterAll(state)
+        }
+
         /**
-         * Cancels the state machine.
+         * Cancels the *root* state machine and unregisters all associated event listeners.
          */
-        fun cancel(){
+        fun cancelRoot(){
+            var root: StateMachine<T, *> = this
+            while(root.parentStateMachine != null){
+                root = root.parentStateMachine!!
+            }
+
+            if(!root.isActive) return
+
+            root.apply {
+                exitCurrentState()
+                unloadState(this)
+                isActive = false
+            }
+        }
+
+        private fun exitCurrentState(){
             val currentStateIndex = states.keys.indexOf(activeStateKey)
             val stateModel = states.values.elementAt(currentStateIndex)
-            states[activeStateKey] = stateFactory.values.elementAt(currentStateIndex)() // move this to enter state
-            (stateModel as? StateMachine<T, *>)?.cancel()
-            stateModel.onDisable()
-            HandlerList.unregisterAll(stateModel)
+            states[activeStateKey] = stateFactory.values.elementAt(currentStateIndex)()
+            (stateModel as? StateMachine<T, *>)?.exitCurrentState()
+            unloadState(stateModel)
         }
     }
-
-    /**
-     * An abstract class representing a state in a [StateMachine].
-     *
-     * @param holder The unique object that owns the state machine structure.
-     * @param parentStateMachine The parent [StateMachine] of this instance.
-     */
-    abstract class State<T : Any>(holder: T, parentStateMachine: StateMachine<T, *>) : BaseState<T>(holder, parentStateMachine)
 }
 
+/**
+ * An abstract class representing a state in a [StateMachine].
+ *
+ * @param owner The unique object that owns the state machine structure.
+ * @param parentStateMachine The parent [StateMachine] of this instance.
+ */
+abstract class State<T : Any>(owner: T, parentStateMachine: StateMachine<T, *>) : BaseState<T>(owner, parentStateMachine)

@@ -5,11 +5,11 @@ import com.dearliet.statecontrol.models.BaseState.StateMachine
 /**
  * [LinearStateMachine] is a concrete implementation of [StateMachine] that allows for traversing through a set of states in a linear fashion.
  *
- * @param holder The unique object that owns the state machine structure
+ * @param owner The unique object that owns the state machine structure
  * @param parentStateMachine The parent [StateMachine] of this instance.
  */
-abstract class LinearStateMachine<T : Any>(holder: T, parentStateMachine: StateMachine<T, *>? = null)
-    : StateMachine<T, Int>(holder, parentStateMachine) {
+abstract class LinearStateMachine<T : Any>(owner: T, parentStateMachine: StateMachine<T, *>? = null)
+    : StateMachine<T, Int>(owner, parentStateMachine) {
 
     abstract override val initStates: List<() -> BaseState<T>>
 
@@ -41,14 +41,14 @@ abstract class LinearStateMachine<T : Any>(holder: T, parentStateMachine: StateM
     }
 
     /**
-     * Transitions to the next [BaseState] in the [states] map.
+     * Transitions to the next [BaseState] in the [states] map. Has no effect if the state machine has not been started.
      */
     fun next(){
         step(1)
     }
 
     /**
-     * Transitions to the previous [BaseState] in the [states] map.
+     * Transitions to the previous [BaseState] in the [states] map. Has no effect if the state machine has not been started.
      */
     fun previous(){
         step(-1)

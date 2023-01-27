@@ -1,7 +1,6 @@
 package com.dearliet.statecontrol.models
 
 import com.dearliet.statecontrol.StateControl
-import com.dearliet.statecontrol.models.BaseState.State
 import com.dearliet.statecontrol.models.BaseState.StateMachine
 import org.bukkit.Bukkit
 import org.bukkit.scheduler.BukkitRunnable
@@ -10,11 +9,11 @@ import org.bukkit.scheduler.BukkitTask
 /**
  * The [TimerState] class counts down from a specified number of [units] and allows an action to be specified once the timer has run out.
  *
- * @param holder The unique object that owns the state machine structure.
+ * @param owner The unique object that owns the state machine structure.
  * @param parentStateMachine The parent [StateMachine] of this instance.
  */
-abstract class TimerState<T : Any>(holder: T, parentStateMachine: StateMachine<T, *>)
-    : State<T>(holder, parentStateMachine) {
+abstract class TimerState<T : Any>(owner: T, parentStateMachine: StateMachine<T, *>)
+    : State<T>(owner, parentStateMachine) {
 
     private lateinit var task: BukkitTask
     /**
