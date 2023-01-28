@@ -6,7 +6,7 @@
 
     <groupId>com.dearliet</groupId>
     <artifactId>statecontrol</artifactId>
-    <version>1.0.9-SNAPSHOT</version>
+    <version>1.0.10-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>StateControl</name>
@@ -37,11 +37,7 @@
                                 <filter>
                                     <artifact>*:*</artifact>
                                     <excludes>
-                                        <exclude>META-INF/versions/**</exclude>
-                                        <exclude>META-INF/*.MF</exclude>
-                                        <exclude>META-INF/*.SF</exclude>
-                                        <exclude>META-INF/*.DSA</exclude>
-                                        <exclude>META-INF/*.RSA</exclude>
+                                        <exclude>META-INF/**</exclude>
                                         <exclude>LICENSE</exclude>
                                     </excludes>
                                 </filter>
@@ -130,6 +126,7 @@
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-stdlib-jdk8</artifactId>
             <version>${kotlin.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
