@@ -39,7 +39,7 @@ sealed class BaseState<T: Any>(protected val owner: T, open val parentStateMachi
         /**
          * A [LinkedHashMap] that holds the fully-initialized [BaseState] instances.
          */
-        internal val states: LinkedHashMap<E, BaseState<T>> by lazy { stateFactory.mapValues { it.value.invoke() }.toMap() as LinkedHashMap<E, BaseState<T>> }
+        internal val states: LinkedHashMap<E, BaseState<T>> by lazy { stateFactory.mapValues { it.value() }.toMap() as LinkedHashMap<E, BaseState<T>> }
         /**
          * The key (or enumeration) of the initial [BaseState] of the state machine.
          */

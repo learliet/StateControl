@@ -6,7 +6,7 @@
 
     <groupId>com.dearliet.statecontrol</groupId>
     <artifactId>statecontrol</artifactId>
-    <version>1.0.18-SNAPSHOT</version>
+    <version>1.0.19-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>StateControl</name>
