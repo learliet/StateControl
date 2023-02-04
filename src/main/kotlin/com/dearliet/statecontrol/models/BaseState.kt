@@ -95,7 +95,7 @@ sealed class BaseState<T: Any>(protected val owner: T, open val parentStateMachi
 
         private fun loadState(state: BaseState<T>){
             state.onEnable()
-            Bukkit.getPluginManager().registerEvents(state, StateControl.instance)
+            Bukkit.getPluginManager().registerEvents(state, StateControl.getInstance())
         }
 
         private fun unloadState(state: BaseState<T>){
