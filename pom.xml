@@ -42,9 +42,6 @@
                                         <exclude>META-INF/*.SF</exclude>
                                         <exclude>META-INF/*.DSA</exclude>
                                         <exclude>META-INF/*.RSA</exclude>
-                                        <exclude>**/*.kotlin_metadata</exclude>
-                                        <exclude>**/*.kotlin_module</exclude>
-                                        <exclude>**/*.kotlin_builtins</exclude>
                                         <exclude>LICENSE</exclude>
                                     </excludes>
                                 </filter>
