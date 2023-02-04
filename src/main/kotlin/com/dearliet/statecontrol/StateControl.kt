@@ -2,16 +2,13 @@ package com.dearliet.statecontrol
 
 import org.bukkit.plugin.java.JavaPlugin
 
-object StateControl {
+internal class StateControl : JavaPlugin() {
 
-    private lateinit var instance: JavaPlugin
-
-    fun setImplementation(plugin: JavaPlugin){
-        instance = plugin
+    companion object {
+        lateinit var instance: StateControl
     }
 
-    internal fun getInstance() : JavaPlugin {
-        if(!this::instance.isInitialized) throw IllegalStateException("No implementation set.")
-        return instance
+    override fun onEnable() {
+        instance = this
     }
 }

@@ -47,7 +47,7 @@ abstract class TimerState<T : Any>(owner: T, parentStateMachine: StateMachine<T,
                 if(unitsLeft-- <= 0) onComplete()
             }
 
-        }.runTaskTimer(StateControl.getInstance(), 0, ticksPerUnit)
+        }.runTaskTimer(StateControl.instance, 0, ticksPerUnit)
     }
 
     override fun onDisable() {
